@@ -3,7 +3,7 @@
 from qat.lang.AQASM import Program
 from qat.lang.AQASM.qint import QInt
 import qat.lang.AQASM.qftarith as qftarith
-import qat.lang.AQASN.classarith as classarith
+import qat.lang.AQASM.classarith as classarith
 from qat.qpus import PyLinalg
 from qat.core.console import display
 
