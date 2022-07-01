@@ -19,7 +19,7 @@ y = prog.qalloc(reg_size, QInt)
 
 # y = 3, x = 2*y
 y.set_value(3)
-prog.apply(qftarith.add_const(reg_size,constant), [y,x])
+prog.apply(qftarith.add_const(reg_size,constant), [y])
 
 # Use the most basic, on computer linear algebra engine.
 qpu = PyLinalg()
