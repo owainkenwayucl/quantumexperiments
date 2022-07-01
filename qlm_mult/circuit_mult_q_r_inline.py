@@ -19,7 +19,8 @@ y = prog.qalloc(reg_size, QInt, reverse_bit_order=True)
 
 # y = 3, x = 2*y
 y.set_value(3)
-prog.apply(~qftarith.mult_const)(reg_size,reg_size,constant), [y,x])
+gate = (~qftarith.mult_const)(reg_size,reg_size,constant)
+prog.apply(gate, [y,x])
 
 # Use the most basic, on computer linear algebra engine.
 qpu = PyLinalg()
