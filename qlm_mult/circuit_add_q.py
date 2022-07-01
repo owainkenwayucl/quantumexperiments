@@ -14,11 +14,15 @@ constant = 2
 prog = Program()
 
 # allocate two registers, x and y
-x = prog.qalloc(reg_size, QInt)
+x = prog.qalloc(reg_size, QInt, reverse_bit_order=True)
 y = prog.qalloc(reg_size, QInt)
 
-# y = 3, x = 2*y
+# y = 3, x = 3
 y.set_value(3)
+x.set_value(3)
+
+# add constant to each
+prog.apply(qftarith.add_const(reg_size,constant), [x])
 prog.apply(qftarith.add_const(reg_size,constant), [y])
 
 # Use the most basic, on computer linear algebra engine.
