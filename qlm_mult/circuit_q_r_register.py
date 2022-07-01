@@ -41,4 +41,4 @@ result_q = qpu.submit(job_q)
 
 # Print the results.
 for sample in result_q:
-	print("State [kenway arith]: {}".format(sample.state))
+	print("State [qft arith]: {}".format(sample.state))
