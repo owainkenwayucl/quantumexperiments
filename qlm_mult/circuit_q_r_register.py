@@ -10,11 +10,12 @@ from qat.core.console import display
 # Some settings
 reg_size = 6
 constant = 2
+ans_size = reg_size
 
 prog = Program()
 
 # allocate two registers, x and y
-x = prog.qalloc(reg_size, QInt, reverse_bit_order=True)
+x = prog.qalloc(ans_size, QInt, reverse_bit_order=True)
 y = prog.qalloc(reg_size, QInt, reverse_bit_order=True)
 c = prog.qalloc(reg_size, QInt, reverse_bit_order=True)
 
