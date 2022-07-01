@@ -1,5 +1,7 @@
 # Investigating issues spotted by a colleague with library math functions
 # in MyQLM
+
+# This program fails with a mysterious arity problem....
 from qat.lang.AQASM import Program
 from qat.lang.AQASM.qint import QInt
 import qat.lang.AQASM.qftarith as qftarith
