@@ -26,22 +26,15 @@ qpu = PyLinalg()
 # Create two versions of the circuit, one doing QFT arith and one doing
 # classical arithmetic.
 circ_q = prog.to_circ(link=[qftarith])
-circ_c = prog.to_circ(link=[classarith])
 
 # This is probably boring as we can't inline operators?
 display(circ_q)
-display(circ_c)
 
 # Run the circuits
 job_q = circ_q.to_job()
-job_c = circ_c.to_job()
 
 result_q = qpu.submit(job_q)
-result_c = qpu.submit(job_c)
 
 # Print the results.
 for sample in result_q:
 	print("State [qft arith]: {}".format(sample.state))
-
-for sample in result_c:
-	print("State [classical arith]: {}".format(sample.state))
