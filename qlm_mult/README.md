@@ -196,3 +196,80 @@ State [kenway arith]: |6>|3>
 
 This makes me very suspicious about what [qftarith.mult\_const](https://myqlm.github.io/qat-lang-arith.html#qat.lang.AQASM.qftarith.mult_const) is doing...
 
+## 5. Try to see inside `qftarith.mult_const`.
+
+One of the features describbed in the documentation is that you can see inside some of these complex gates by inlining them, using `~`.  I tried to do this in [`circuit_mult_q_r_inline.py`](circuit_mult_q_r_inline.py):
+
+```python
+# y = 3, x = 2*y
+y.set_value(3)
+gate = (~qftarith.mult_const)(reg_size,reg_size,constant)
+prog.apply(gate, [y,x])
+
+```
+
+This however crashes when run throwing an arity error:
+
+```
+(ql2) lab@phobos:~/Source/quantumexperiments/qlm_mult$ python3 circuit_mult_q_r_inline.py
+Traceback (most recent call last):
+  File "/home/lab/Source/quantumexperiments/qlm_mult/circuit_mult_q_r_inline.py", line 25, in <module>
+    prog.apply(gate, [y,x])
+  File "program.py", line 193, in qat.lang.AQASM.program.Program.apply
+  File "operations.py", line 70, in qat.lang.AQASM.operations.QGateOperation.__init__
+  File "aqasm_util.py", line 135, in qat.lang.AQASM.aqasm_util.sanity
+qat.lang.AQASM.aqasm_util.InvalidGateArguments: Gate None of arity 8 cannot be applied on [q[6],q[7],q[8],q[9],q[10],q[11],q[0],q[1],q[2],q[3],q[4],q[5]]
+```
+
+That's pretty interesting in and of itself because we are somehow getting an arity of 8 out of calling it with `reg_size,reg_size` where `reg_size` = 6, and *all we have changed* is that we are no inlining instead of accepting tthe abstract gate.  If we fudge it by adding 4 to the arity of the first register [`circuit_mult_q_r_inline_fudge.py`](circuit_mult_q_r_inline_fudge.py), we get a circuit diagram which is clearly way to simple to be correct, as it consists of a QFT, a phase by π and a reverse QFT:
+
+```
+                                                                                                                                                                                                                   
+───────────────────────── 
+                          
+                          
+                          
+───────────────────────── 
+                          
+                          
+                          
+───────────────────────── 
+                          
+                          
+                          
+───────────────────────── 
+                          
+                          
+ ┌──────┐       ┌───────┐ 
+─┤QFT[2]├───────┤QFT†[2]├ 
+ │      │       │       │ 
+ │      │       │       │ 
+ │      │┌─────┐│       │ 
+─┤      ├┤PH[π]├┤       ├ 
+ └──────┘└┬────┘└───────┘ 
+          │               
+ ┌─┐      │               
+─┤X├──────●────────────── 
+ └─┘                      
+                          
+ ┌─┐                      
+─┤X├───────────────────── 
+ └─┘                      
+                          
+                          
+───────────────────────── 
+                          
+                          
+                          
+───────────────────────── 
+                          
+                          
+                          
+───────────────────────── 
+                          
+                          
+                          
+─────────────────────────  
+```
+
+
