@@ -29,10 +29,12 @@ prog.apply(qftarith.mult_const(reg_size,reg_size,constant), [y,x])
 According to the documentation:
 
 > "Builds a circuit performing a multiplication by a constant c. Only the content of the second register is changed:
-> `|a>|b>` -> `|a>|b + a X c>`
+>
+> `|a>|b>` -> `|a>|b + a × c>`
+>
 > The multiplication is performed by a repeated additions of c into the second register. All additions, unless specified, are modulo where n is the size of the register holding the result."
 
-This is an interesting description because the developers, it would seem, had two choices when implementing *b* + *a* X *c* - either add *a* *c* times to *b* or add *c* *a* times to *b*.  Given the value in *c* is a classical integer and therefore easily understood, while *a* is a qubit and therefore a superposition state, it is conceptually easier to go with the first option. Unfortunately, the documentation claims the second and because myQLM is obstinently closed source, it is impossible to see what they have done.
+This is an interesting description because the developers, it would seem, had two choices when implementing *b* + *a* × *c* - either add *a* *c* times to *b* or add *c* *a* times to *b*.  Given the value in *c* is a classical integer and therefore easily understood, while *a* is a qubit and therefore a superposition state, it is conceptually easier to go with the first option. Unfortunately, the documentation claims the second and because myQLM is obstinently closed source, it is impossible to see what they have done.
 
 Either way it does not work:
 
@@ -97,7 +99,7 @@ As part of this process the code prints out cicuit diagram and one of the things
 
 This started me thinking about little vs big endian issues.
 
-## 3. Working out (qu)bit order ([`circuit_add_q.py`](circuit_add_q.py)), [`circuit_mult_q_r.py`](circuit_mult_q_r.py)),)
+## 3. Working out (qu)bit order ([`circuit_add_q.py`](circuit_add_q.py), [`circuit_mult_q_r.py`](circuit_mult_q_r.py)),)
 
 This cicuit allocates *x* and *y* but allocates *x* with a reversed bit order, and then adds 2 to each of those values with [qftarith.add\_const](https://myqlm.github.io/qat-lang-arith.html#qat.lang.AQASM.qftarith.add_const).
 
