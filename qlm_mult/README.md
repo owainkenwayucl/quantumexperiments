@@ -17,7 +17,7 @@ State [qft arith]: |2>|3>
 State [classical arith]: |6>|3>|Anc:000>
 ```
 
-## 2. Call `qftarith.mult_const` directly ([`circuit_mult_q.py`](circuit_mult_q.py)
+## 2. Call `qftarith.mult_const` directly ([`circuit_mult_q.py`](circuit_mult_q.py))
 
 This example sets up *x* and *y* as above and generates a circuit by calling [qftarith.mult\_const](https://myqlm.github.io/qat-lang-arith.html#qat.lang.AQASM.qftarith.mult_const) directly:
 
@@ -131,5 +131,68 @@ This tells us that for `qftarith` to work at all, we need our `Qint`s to be reve
 State [qft arith]: |2>|3>
 ```
 
+## 4. Write our own multiplication routine ([`qlm_math.py`](qlm_math.py), [`circuit_q_r_mylib.py`](circuit_q_r_mylib.py))
 
+This code implements our own multiply routine (`looped_add`) which for `|a>|b>` -> `|a>|b + a × c>` implements it as `c` [qftarith.add\_const](https://myqlm.github.io/qat-lang-arith.html#qat.lang.AQASM.qftarith.add_const) additions of `a` to `b`.
+
+This generates both the expected circuit diagram and answer:
+
+```
+    ┌─────────┐┌─────────┐ 
+────┤         ├┤         ├ 
+    │         ││         │ 
+    │         ││         │ 
+    │         ││         │ 
+────┤         ├┤         ├ 
+    │         ││         │ 
+    │         ││         │ 
+    │         ││         │ 
+────┤         ├┤         ├ 
+    │         ││         │ 
+    │         ││         │ 
+    │         ││         │ 
+────┤         ├┤         ├ 
+    │         ││         │ 
+    │         ││         │ 
+    │         ││         │ 
+────┤         ├┤         ├ 
+    │         ││         │ 
+    │         ││         │ 
+    │         ││         │ 
+────┤ADD[6, 6]├┤ADD[6, 6]├ 
+    │         ││         │ 
+    │         ││         │ 
+ ┌─┐│         ││         │ 
+─┤X├┤         ├┤         ├ 
+ └─┘│         ││         │ 
+    │         ││         │ 
+ ┌─┐│         ││         │ 
+─┤X├┤         ├┤         ├ 
+ └─┘│         ││         │ 
+    │         ││         │ 
+    │         ││         │ 
+────┤         ├┤         ├ 
+    │         ││         │ 
+    │         ││         │ 
+    │         ││         │ 
+────┤         ├┤         ├ 
+    │         ││         │ 
+    │         ││         │ 
+    │         ││         │ 
+────┤         ├┤         ├ 
+    │         ││         │ 
+    │         ││         │ 
+    │         ││         │ 
+────┤         ├┤         ├ 
+    └─────────┘└─────────┘ 
+
+```
+
+Output:
+
+```
+State [kenway arith]: |6>|3>
+```
+
+This makes me very suspicious about what [qftarith.mult\_const](https://myqlm.github.io/qat-lang-arith.html#qat.lang.AQASM.qftarith.mult_const) is doing...
 
