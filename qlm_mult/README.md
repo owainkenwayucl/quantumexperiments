@@ -228,7 +228,6 @@ qat.lang.AQASM.aqasm_util.InvalidGateArguments: Gate None of arity 8 cannot be a
 That's pretty interesting in and of itself because we are somehow getting an arity of 8 out of calling it with `reg_size,reg_size` where `reg_size` = 6, and *all we have changed* is that we are now inlining instead of accepting the abstract gate.  If we fudge it by adding 4 to the arity of the first register [`circuit_mult_q_r_inline_fudge.py`](circuit_mult_q_r_inline_fudge.py), we get a circuit diagram which is clearly way to simple to be correct, as it consists of a QFT, a phase by π and a reverse QFT:
 
 ```
-                                                                                                                                                                                                                   
 ───────────────────────── 
                           
                           
