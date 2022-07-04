@@ -6,7 +6,7 @@ MyQLM claims to be able to do this both as part of `qftarith` package with [qfta
 
 ## Background:
 
-I am a long term programmer of classical computers.  I have been on some courses of programming quantum machines and have used both (my)QLM and QISKIT to write small systems.  I am extremely far from an expert however.  I've documented this mainly to show how I tried to reason my way through the problem, particularly when we have a piece of software which is closed source (myQLM) and cannot inspect its inner workings.  Maybe this is of help to others.  In addition to the stuff described here, I *also* re-implemented some of this in QISKIT, to try and reason about why myQLM was behaving as it was (in particular in step 6, there is an equivalent function in QISKIT), and before I had the big/little endian stuff worked out I did a lot of work manually setting wires rather than using `Qint`s to see what was going on.  Maybe I'll add these parts at a later date.  Or maybe not.
+I am a long term programmer of classical computers.  I have been on some courses of programming quantum machines and have used both (my)QLM and QISKIT to write small systems.  I am extremely far from an expert however.  I've documented this mainly to show how I tried to reason my way through the problem, particularly when we have a piece of software which is closed source (MyQLM) and cannot inspect its inner workings.  Maybe this is of help to others.  In addition to the stuff described here, I *also* re-implemented some of this in QISKIT, to try and reason about why MyQLM was behaving as it was (in particular in step 6, there is an equivalent function in QISKIT), and before I had the big/little endian stuff worked out I did a lot of work manually setting wires rather than using `Qint`s to see what was going on.  Maybe I'll add these parts at a later date.  Or maybe not.
 
 ## 1. Operator overloading ([`basic_mult.py`](basic_mult.py))
 
@@ -38,7 +38,7 @@ According to the documentation:
 >
 > The multiplication is performed by a repeated additions of c into the second register. All additions, unless specified, are modulo where n is the size of the register holding the result."
 
-This is an interesting description because the developers, it would seem, had two choices when implementing *b* + *a* × *c* - either add *a* *c* times to *b* or add *c* *a* times to *b*.  Given the value in *c* is a classical integer and therefore easily understood, while *a* is a qubit and therefore a superposition state, it is conceptually easier to go with the first option. Unfortunately, the documentation claims the second and because myQLM is obstinently closed source, it is impossible to see what they have done.
+This is an interesting description because the developers, it would seem, had two choices when implementing *b* + *a* × *c* - either add *a* *c* times to *b* or add *c* *a* times to *b*.  Given the value in *c* is a classical integer and therefore easily understood, while *a* is a qubit and therefore a superposition state, it is conceptually easier to go with the first option. Unfortunately, the documentation claims the second and because MyQLM is obstinently closed source, it is impossible to see what they have done.
 
 Either way it does not work:
 
@@ -278,7 +278,7 @@ That's pretty interesting in and of itself because we are somehow getting an ari
 
 ## 6. Making *c* a `Qint` ([`circuit_q_r_register.py`](circuit_q_r_register.py), [`circuit_q_r_register_noinline.py`](circuit_q_r_register_noinline.py))
 
-Because MyQLM is closed source it is impossible to see what the `mult_const` routine is doing and so I took a look at implementing the problem in QISKIT to see if I could replicate the behaviour. The guide I found to multiplying numbers with the equivalent routine set wires directly (it's not clear to me if QISKIT has an equivalent of `Qint` but I didn't look very hard) and in fact effectively multiplied two `Qint`s together.  So I thought it was worth a shot in myQLM.  To multiply two `Qint` "registers" together you use  [qftarith.mult](https://myqlm.github.io/qat-lang-arith.html#qat.lang.AQASM.qftarith.mult):
+Because MyQLM is closed source it is impossible to see what the `mult_const` routine is doing and so I took a look at implementing the problem in QISKIT to see if I could replicate the behaviour. The guide I found to multiplying numbers with the equivalent routine set wires directly (it's not clear to me if QISKIT has an equivalent of `Qint` but I didn't look very hard) and in fact effectively multiplied two `Qint`s together.  So I thought it was worth a shot in MyQLM.  To multiply two `Qint` "registers" together you use  [qftarith.mult](https://myqlm.github.io/qat-lang-arith.html#qat.lang.AQASM.qftarith.mult):
 
 ```python
 x = prog.qalloc(ans_size, QInt, reverse_bit_order=True)
@@ -375,7 +375,7 @@ Output:
 State [qft arith]: |6>|3>|2>
 ```
 
-There is a version without the inlining [`circuit_q_r_register_noinline.py`](circuit_q_r_register_noinline.py)), and this also works as expected.
+There is a version without the inlining [`circuit_q_r_register_noinline.py`](circuit_q_r_register_noinline.py), and this also works as expected.
 
 
 ## Conclusions
