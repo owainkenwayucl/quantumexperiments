@@ -375,4 +375,17 @@ Output:
 State [qft arith]: |6>|3>|2>
 ```
 
+There is a version without the inlining [`circuit_q_r_register_noinline.py`](circuit_q_r_register_noinline.py)), and this also works as expected.
 
+
+## Conclusions
+
+Well obviously as a massively old-fashioned classical programmer I can't exclude the possibility that [qftarith.mult\_const](https://myqlm.github.io/qat-lang-arith.html#qat.lang.AQASM.qftarith.mult_const) is fine and it is me that is wrong, but I personally suspect a bug.  Here is my reasoning.
+
+1. The biggest smoking gun is arity changing when we in-line.  This definitely means something is broken.
+2. The implementation is inverted, doing *a* additions of *c* rather than the other way around.  Implementing it the more intuitive way gives the correct answer.
+3. Using 2 `Qint`s gives the correct answer.
+
+It's hard to tell how this is implemented when it is closed source.  I did take a look in my python library directory and bafflingly, the *python* code is distributed as (presumably `.pyc` bytecode inside) `.so` files, something I didn't even know you could do.  Theoretically it would be possible to extract somewhat readable python from that but I'm not really keen on going that far.  I'd rather just... use QISKIT which is properly Open Source.
+
+You can replicate all of this by setting wires directly, with an `X` gate which was interesting when working out the little vs big endian stuff.  It's not clear to me why the math library is one while the `Qint` representation is the other but again, that's a bit problematic.  Finally, I found that there is a serouse lack of documentation and useful example code in the MyQLM release.  For example, I did not find anything clear on writing Qroutines/AbsttractGates and so when writing my own multiplier, I fudged it a lot.
