@@ -376,6 +376,7 @@ State [qft arith]: |6>|3>|2>
 
 There is a version without the inlining [`circuit_q_r_register_noinline.py`](circuit_q_r_register_noinline.py), and this also works as expected.
 
+Finally, [`basic_mult_register.py`](basic_mult_register.py) uses operator overloading to the same end.
 
 ## Conclusions
 
