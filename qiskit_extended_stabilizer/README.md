@@ -174,3 +174,7 @@ Running `python3 test_ext.py 40` should output:
 40
 This succeeded?: True
 ```
+
+### FIXED
+
+So it turns out that between 0.29.1 and 0.30.0 a bunch of stuff was deprecated in Qiskit. Updating the code solves the problem, as can be seen in `test_ext_fixed.py` and `test_sv_fixed.py`.
